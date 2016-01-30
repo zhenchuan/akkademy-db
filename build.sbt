@@ -1,10 +1,33 @@
-name := """akkademy-db-scala"""
-organization := "sk.bsmk"
-version := "0.1.0-SNAPSHOT"
-scalaVersion := "2.11.7"
+lazy val buildSettings = Seq{
+  organization := "sk.bsmk"
+  version := "0.1.0-SNAPSHOT"
+  scalaVersion := "2.11.7"
+}
+
+
+lazy val db = (project in file(".")).
+  settings(buildSettings: _*).
+  settings(name := """akkademy-db-scala""").
+  aggregate(server)
+
+
+lazy val messages = (project in file("messages")).
+  settings(buildSettings: _*).
+  settings(
+    name := """akkademy-db-messages"""
+  )
+
+lazy val server = (project in file("server")).
+  dependsOn(messages).
+  settings(buildSettings: _*).
+  settings(
+    name := """akkademy-db-server""",
+    libraryDependencies ++= commonDependencies
+  )
+
 
 // Change this to another test framework if you prefer
-libraryDependencies ++= Seq(
+lazy val commonDependencies = Seq(
   "com.typesafe.akka" %% "akka-actor" % "2.4.1",
   "com.typesafe.akka" %% "akka-remote" % "2.4.1",
   "com.typesafe.akka" %% "akka-slf4j" % "2.4.1",
@@ -13,7 +36,3 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "2.2.6" % "test",
   "org.scalacheck" %% "scalacheck" % "1.12.5"
 )
-
-mappings in (Compile, packageBin) ~= { _.filterNot { case (_, fileName) =>
-  Seq("application.conf").contains(fileName)
-}}
