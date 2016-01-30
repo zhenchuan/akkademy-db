@@ -1,6 +1,6 @@
 package sk.bsmk.akkademy.ch2
 
-import akka.actor.{Props, Status, Actor}
+import akka.actor.{Actor, Props, Status}
 
 /**
   * Created by miroslav.matejovsky on 30/01/16.

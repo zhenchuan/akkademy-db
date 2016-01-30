@@ -3,13 +3,11 @@ package sk.bsmk.akkademy.ch1
 import akka.actor.ActorSystem
 import akka.testkit.TestActorRef
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
-import org.scalatest.{Ignore, BeforeAndAfterEach, Matchers, FunSpecLike}
+import org.scalatest.{BeforeAndAfterEach, FunSpecLike, Ignore, Matchers}
 
 /**
   * Created by miroslav.matejovsky on 30/01/16.
-  * scalacheck is used so it takes little longer
   */
-@Ignore
 class StoreLastStringActorSpec extends FunSpecLike with Matchers with BeforeAndAfterEach with GeneratorDrivenPropertyChecks {
 
   implicit val actorSystem = ActorSystem()

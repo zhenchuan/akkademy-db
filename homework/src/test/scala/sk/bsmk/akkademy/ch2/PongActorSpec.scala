@@ -1,12 +1,13 @@
 package sk.bsmk.akkademy.ch2
 
 import akka.actor.ActorSystem
+import akka.pattern.ask
 import akka.util.Timeout
-import org.scalatest.{Matchers, FunSpecLike}
+import org.scalatest.{FunSpecLike, Matchers}
+
 import scala.concurrent.Await
 import scala.concurrent.duration._
-import akka.pattern.ask
-import language.postfixOps
+import scala.language.postfixOps
 
 /**
   * Created by miroslav.matejovsky on 30/01/16.

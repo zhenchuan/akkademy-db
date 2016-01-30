@@ -33,6 +33,15 @@ lazy val client = (project in file("client")).
     libraryDependencies ++= commonDependencies
   )
 
+
+lazy val homework = (project in file("homework")).
+  dependsOn(messages).
+  settings(buildSettings: _*).
+  settings(
+    name := """akkademy-db-homework""",
+    libraryDependencies ++= commonDependencies
+  )
+
 lazy val akkaVersion = "2.4.1"
 
 // Change this to another test framework if you prefer
