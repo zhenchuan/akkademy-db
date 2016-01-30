@@ -14,10 +14,10 @@ class StoreLastStringActor extends Actor {
   override def receive: Receive = {
 
     case s: String =>
-      log.info(s"received $s")
+      //log.info(s"received $s")
       lastReceived = Option(s)
 
-    case o => log.info(s"received unknown message $o")
+    case o => //log.info(s"received unknown message $o")
 
   }
 }
