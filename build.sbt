@@ -25,14 +25,23 @@ lazy val server = (project in file("server")).
     libraryDependencies ++= commonDependencies
   )
 
+lazy val client = (project in file("client")).
+  dependsOn(messages).
+  settings(buildSettings: _*).
+  settings(
+    name := """akkademy-db-client""",
+    libraryDependencies ++= commonDependencies
+  )
+
+lazy val akkaVersion = "2.4.1"
 
 // Change this to another test framework if you prefer
 lazy val commonDependencies = Seq(
-  "com.typesafe.akka" %% "akka-actor" % "2.4.1",
-  "com.typesafe.akka" %% "akka-remote" % "2.4.1",
-  "com.typesafe.akka" %% "akka-slf4j" % "2.4.1",
+  "com.typesafe.akka" %% "akka-actor" % akkaVersion,
+  "com.typesafe.akka" %% "akka-remote" % akkaVersion,
+  "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
   "ch.qos.logback" % "logback-classic" % "1.1.3",
-  "com.typesafe.akka" %% "akka-testkit" % "2.4.1" % "test",
+  "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test",
   "org.scalatest" %% "scalatest" % "2.2.6" % "test",
   "org.scalacheck" %% "scalacheck" % "1.12.5"
 )

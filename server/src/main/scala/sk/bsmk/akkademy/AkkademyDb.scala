@@ -1,6 +1,7 @@
 package sk.bsmk.akkademy
 
-import akka.actor.{Status, ActorLogging, Actor}
+import akka.actor._
+import org.slf4j.LoggerFactory
 import sk.bsmk.akkademy.messages.{KeyNotFoundException, GetRequest, SetRequest}
 
 import scala.collection.mutable
@@ -29,5 +30,16 @@ class AkkademyDb extends Actor with ActorLogging {
     case o => Status.Failure(new ClassNotFoundException)
     //case o => sender() ! Status.Failure(new ClassNotFoundException)
   }
+
+}
+
+object Main extends App {
+
+  val log = LoggerFactory.getLogger(Main.getClass)
+
+  val system = ActorSystem("akkademy")
+  val actorRef = system.actorOf(Props[AkkademyDb], name = "akkademy-db")
+
+  log.info("Started actor with path: {}", actorRef.path)
 
 }
