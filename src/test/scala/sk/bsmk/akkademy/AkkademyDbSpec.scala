@@ -21,5 +21,13 @@ class AkkademyDbSpec extends FunSpecLike with Matchers with BeforeAndAfterEach {
         akkademyDb.map.get("key") should equal(Some("value"))
       }
     }
+    describe("given unknown message") {
+      it("should respond with failure") {
+        val actorRef = TestActorRef(new AkkademyDb)
+        actorRef ! "foo"
+        val akkademyDb = actorRef.underlyingActor
+        akkademyDb.map.size should equal(0)
+      }
+    }
   }
 }
