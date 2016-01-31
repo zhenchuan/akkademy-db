@@ -5,7 +5,7 @@ import akka.testkit.TestActorRef
 import akka.util.Timeout
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatest.{BeforeAndAfterEach, Matchers, FunSpecLike}
-import sk.bsmk.akkademy.messages.{UnknownMessage, SetRequest}
+import sk.bsmk.akkademy.messages._
 import akka.pattern.ask
 
 import scala.concurrent.Await
@@ -27,16 +27,16 @@ class AkkademyDbSpec extends FunSpecLike with Matchers with BeforeAndAfterEach w
     testCode(actorRef, akkademyDb)
   }
 
-  def withSentMessage(request: Any)(testCode: (AkkademyDb, Any) => Any): Unit = {
+  def withSentMessage(messageToSend: Any)(testCode: (AkkademyDb, Any) => Any): Unit = {
     withActorRef { (actorRef, akkademyDb) =>
-      val future = actorRef ? request
+      val future = actorRef ? messageToSend
       val response = Await.result(future, 1 second)
       testCode(akkademyDb, response)
     }
   }
 
   describe("akkademyDb") {
-    describe("SetRequest") {
+    describe(SetRequest.toString()) {
       it("should place key/value into map") {
         forAll { (key: String, value: String) =>
           withSentMessage(SetRequest(key, value)) { (akkademyDb, response) =>
@@ -46,10 +46,22 @@ class AkkademyDbSpec extends FunSpecLike with Matchers with BeforeAndAfterEach w
           }
         }
       }
+    }
+    describe(SetIfNotExistsRequest.toString()) {
+
+    }
+    describe(GetRequest.toString()) {
+
+    }
+
+    describe(DeleteRequest.toString()) {
+
+    }
+    describe("unknown request") {
       it("should respond with failure") {
         withActorRef { (actorRef, akkademyDb) =>
           val future = actorRef ? "some-string"
-          intercept[UnknownMessage] {
+          intercept[UnknownRequestException] {
             Await.result(future, 1 second)
           }
           akkademyDb.map.size should equal(0)
@@ -57,5 +69,4 @@ class AkkademyDbSpec extends FunSpecLike with Matchers with BeforeAndAfterEach w
       }
     }
   }
-
 }

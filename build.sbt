@@ -35,7 +35,6 @@ lazy val client = (project in file("client")).
 
 
 lazy val homework = (project in file("homework")).
-  dependsOn(messages).
   settings(buildSettings: _*).
   settings(
     name := """akkademy-db-homework""",
@@ -54,3 +53,9 @@ lazy val commonDependencies = Seq(
   "org.scalatest" %% "scalatest" % "2.2.6" % "test",
   "org.scalacheck" %% "scalacheck" % "1.12.5"
 )
+
+/*
+lazy val compileScalastyle = taskKey[Unit]("compileScalastyle")
+compileScalastyle := org.scalastyle.sbt.ScalastylePlugin.scalastyle.in(Compile).toTask("").value
+(compile in Compile) <<= (compile in Compile) dependsOn compileScalastyle
+*/

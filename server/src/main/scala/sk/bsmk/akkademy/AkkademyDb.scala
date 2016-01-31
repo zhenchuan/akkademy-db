@@ -15,23 +15,11 @@ class AkkademyDb extends Actor with ActorLogging {
 
   val map = new mutable.HashMap[String, Any]
 
-  private def putAndRespond(key: String, value: Any): Unit = {
-    log.debug("storing k:{} v:{}", key, value)
-    map.put(key, value)
-    sender ! Status.Success
-  }
-
   override def receive: Receive = {
 
-    case r: SetRequest =>
-      putAndRespond(r.key, r.value)
+    case r: SetRequest => putAndRespond(r.key, r.value)
 
-    case r: SetIfNotExistsRequest =>
-      if (map.contains(r.key)) {
-        sender ! Status.Failure(new KeyAlreadyExistsException(r.key))
-      } else {
-        putAndRespond(r.key, r.value)
-      }
+    case r: SetIfNotExistsRequest => handleRequest(r)
 
     case r: GetRequest =>
       map.get(r.key) match {
@@ -45,7 +33,20 @@ class AkkademyDb extends Actor with ActorLogging {
         case None        => sender() ! new KeyNotFoundException(r.key)
       }
 
-    case o => sender() ! Status.Failure(UnknownMessage(s"Received unknown $o"))
+    case o => sender() ! Status.Failure(UnknownRequestException(s"Received unknown $o"))
+  }
+
+  private def handleRequest(request: SetIfNotExistsRequest) =
+    if (map.contains(request.key)) {
+      sender ! Status.Failure(new KeyAlreadyExistsException(request.key))
+    } else {
+      putAndRespond(request.key, request.value)
+    }
+
+  private def putAndRespond(key: String, value: Any): Unit = {
+    log.debug("storing k:{} v:{}", key, value)
+    map.put(key, value)
+    sender ! Status.Success
   }
 
 }
