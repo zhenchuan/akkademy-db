@@ -43,7 +43,6 @@ lazy val homework = (project in file("homework")).
 
 lazy val akkaVersion = "2.4.1"
 
-// Change this to another test framework if you prefer
 lazy val commonDependencies = Seq(
   "com.typesafe.akka" %% "akka-actor" % akkaVersion,
   "com.typesafe.akka" %% "akka-remote" % akkaVersion,

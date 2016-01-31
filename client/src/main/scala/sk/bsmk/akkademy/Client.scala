@@ -2,7 +2,7 @@ package sk.bsmk.akkademy
 
 import akka.actor.ActorSystem
 import akka.util.Timeout
-import sk.bsmk.akkademy.messages.{SetRequest, GetRequest}
+import sk.bsmk.akkademy.messages.{DeleteRequest, SetRequest, GetRequest}
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import language.postfixOps
@@ -18,12 +18,16 @@ class Client(remoteAddress: String) {
   private implicit val system = ActorSystem("LocalSystem")
   private val remoteDb = system.actorSelection(s"akka.tcp://akkademy@$remoteAddress/user/akkademy-db")
 
-  def set(key: String, value: Object): Future[Any] = {
+  def set(key: String, value: Any): Future[Any] = {
     remoteDb ? SetRequest(key, value)
   }
 
   def get(key: String): Future[Any] = {
     remoteDb ? GetRequest(key)
+  }
+
+  def delete(key: String): Future[Any] = {
+    remoteDb ? DeleteRequest(key)
   }
 
 }
