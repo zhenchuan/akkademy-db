@@ -1,8 +1,10 @@
 package sk.bsmk.akkademy
 
+import javax.management.openmbean.KeyAlreadyExistsException
+
 import akka.actor._
 import org.slf4j.LoggerFactory
-import sk.bsmk.akkademy.messages.{KeyNotFoundException, GetRequest, SetRequest}
+import sk.bsmk.akkademy.messages._
 
 import scala.collection.mutable
 
@@ -11,24 +13,39 @@ import scala.collection.mutable
   */
 class AkkademyDb extends Actor with ActorLogging {
 
-  val map = new mutable.HashMap[String, Object]
+  val map = new mutable.HashMap[String, Any]
+
+  private def putAndRespond(key: String, value: Any): Unit = {
+    log.debug("storing k:{} v:{}", key, value)
+    map.put(key, value)
+    sender ! Status.Success
+  }
 
   override def receive: Receive = {
-    case SetRequest(key, value) =>
-      log.info("received SetRequest - key: {} value: {}", key, value)
-      map.put(key, value)
-      sender() ! Status.Success
 
-    case GetRequest(key) =>
-      log.info("received GetRequest - key: {}", key)
-      val response = map.get(key)
-      response match {
-        case Some(value) => sender() ! value
-        case None        => sender() ! new KeyNotFoundException(key)
+    case r: SetRequest =>
+      putAndRespond(r.key, r.value)
+
+    case r: SetIfNotExistsRequest =>
+      if (map.contains(r.key)) {
+        sender ! Status.Failure(new KeyAlreadyExistsException(r.key))
+      } else {
+        putAndRespond(r.key, r.value)
       }
 
-    case o => Status.Failure(new ClassNotFoundException)
-    //case o => sender() ! Status.Failure(new ClassNotFoundException)
+    case r: GetRequest =>
+      map.get(r.key) match {
+        case Some(value) => sender() ! value
+        case None        => sender() ! new KeyNotFoundException(r.key)
+      }
+
+    case r: DeleteRequest =>
+      map.remove(r.key) match {
+        case Some(value) => sender() ! value
+        case None        => sender() ! new KeyNotFoundException(r.key)
+      }
+
+    case o => sender() ! Status.Failure(UnknownMessage(s"Received unknown $o"))
   }
 
 }

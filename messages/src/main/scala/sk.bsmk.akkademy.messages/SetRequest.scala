@@ -3,4 +3,4 @@ package sk.bsmk.akkademy.messages
 /**
   * Created by miroslav.matejovsky on 30/01/16.
   */
-case class SetRequest(key: String, value: Object)
+case class SetRequest(key: String, value: Any)
