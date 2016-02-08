@@ -24,7 +24,7 @@ class FibonacciPublicApiActorSpec extends FibonacciSpec {
       it("should return computed fibonacci number") {
         val producerRef = TestActorRef(new FibonacciProducerActor)
         val consumerRef = TestActorRef(new FibonacciConsumerActor(producerRef))
-        val publicApiRef = TestActorRef(new FibonacciPublicApiActor(consumerRef))
+        val publicApiRef = TestActorRef(new FibonacciForwardApiActor(consumerRef))
 
         consumerRef.underlyingActor.actualNumber should equal(Option.empty)
         publicApiRef.underlyingActor.actualNumber should equal(Option.empty)
