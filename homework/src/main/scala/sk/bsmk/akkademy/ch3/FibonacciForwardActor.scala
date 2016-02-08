@@ -8,7 +8,7 @@ import language.postfixOps
 /**
   * Created by miroslav.matejovsky on 08/02/16.
   */
-class FibonacciForwardApiActor(consumer: ActorRef) extends Actor {
+class FibonacciForwardActor(consumer: ActorRef) extends Actor {
 
   var actualNumber: Option[Long] = None
 
