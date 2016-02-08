@@ -3,7 +3,6 @@ package sk.bsmk.akkademy.ch3
 import akka.actor.ActorSystem
 import akka.testkit.TestActorRef
 import akka.util.Timeout
-import org.scalatest.{FunSpecLike, Matchers}
 import sk.bsmk.akkademy.ch3.messages.{ComputedFibonacciNumber, AskFibonacciNumber}
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -13,7 +12,7 @@ import akka.pattern.ask
 /**
   * Created by miroslav.matejovsky on 07/02/16.
   */
-class FibonacciProducerActorSpec extends FunSpecLike with Matchers with FibonacciTestHelper{
+class FibonacciProducerActorSpec extends FibonacciSpec{
 
   implicit val system = ActorSystem()
   implicit val timeout = Timeout(5 seconds)
