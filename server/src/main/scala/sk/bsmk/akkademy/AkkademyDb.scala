@@ -40,7 +40,7 @@ class AkkademyDb extends Actor with ActorLogging {
 
   private def handleRequest(request: SetIfNotExistsRequest) =
     if (map.contains(request.key)) {
-      sender ! Status.Failure(new KeyExistsException(request.key))
+      sender() ! Status.Failure(new KeyExistsException(request.key))
     } else {
       putAndRespond(request.key, request.value)
     }
@@ -48,7 +48,7 @@ class AkkademyDb extends Actor with ActorLogging {
   private def putAndRespond(key: String, value: Any): Unit = {
     log.debug("storing k:{} v:{}", key, value)
     map.put(key, value)
-    sender ! Status.Success
+    sender() ! Status.Success
   }
 
 }

@@ -33,6 +33,13 @@ lazy val client = (project in file("client")).
     libraryDependencies ++= commonDependencies
   )
 
+lazy val akkademaid = (project in file("akkademaid")).
+  settings(buildSettings: _*).
+  settings(
+    name := """akkademaid""",
+    libraryDependencies ++= commonDependencies,
+    libraryDependencies += "com.syncthemall" % "boilerpipe" % "1.2.2"
+  )
 
 lazy val homework = (project in file("homework")).
   settings(buildSettings: _*).
@@ -48,9 +55,10 @@ lazy val commonDependencies = Seq(
   "com.typesafe.akka" %% "akka-remote" % akkaVersion,
   "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
   "ch.qos.logback" % "logback-classic" % "1.1.3",
+
   "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test",
   "org.scalatest" %% "scalatest" % "2.2.6" % "test",
-  "org.scalacheck" %% "scalacheck" % "1.12.5"
+  "org.scalacheck" %% "scalacheck" % "1.12.5" % "test"
 )
 
 /*
