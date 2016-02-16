@@ -1,3 +1,5 @@
+addCompilerPlugin("com.softwaremill.clippy" %% "plugin" % "0.2" classifier "bundle")
+
 lazy val buildSettings = Seq{
   organization := "sk.bsmk"
   version := "0.1.0-SNAPSHOT"
@@ -48,15 +50,25 @@ lazy val homework = (project in file("homework")).
     libraryDependencies ++= commonDependencies
   )
 
-lazy val akkaVersion = "2.4.1"
+lazy val streams = (project in file("streams")).
+  settings(buildSettings: _*).
+  settings(
+    name := """akka-homework""",
+    libraryDependencies ++= commonDependencies
+  )
+
+lazy val akkaVersion = "2.4.2-RC2"
+//lazy val akkaHttpVersion = "2.0.3"
 
 lazy val commonDependencies = Seq(
-  "com.typesafe.akka" %% "akka-actor" % akkaVersion,
+ // "com.typesafe.akka" %% "akka-actor" % akkaVersion,
   "com.typesafe.akka" %% "akka-remote" % akkaVersion,
+  "com.typesafe.akka" %% "akka-http-jackson-experimental" % akkaVersion,
   "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
   "ch.qos.logback" % "logback-classic" % "1.1.3",
 
-  "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test",
+  //"com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test",
+  "com.typesafe.akka" %% "akka-http-testkit-experimental" % akkaVersion % "test",
   "org.scalatest" %% "scalatest" % "2.2.6" % "test",
   "org.scalacheck" %% "scalacheck" % "1.12.5" % "test"
 )
